@@ -1,0 +1,23 @@
+<svg width="180" height="48" viewBox="0 0 180 48" xmlns="http://www.w3.org/2000/svg">
+  <!-- icon mark -->
+  <rect x="0" y="8" width="32" height="32" rx="7" fill="#1b4332"/>
+  <rect x="9" y="14" width="14" height="2" rx="1" fill="#dda15e"/>
+  <rect x="9" y="19" width="2.5" height="14" fill="#fefae0"/>
+  <path d="M11.5 19 L18 19 Q22 19 22 22.5 Q22 26 18 26 L11.5 26 Z"
+        fill="none"
+        stroke="#fefae0"
+        stroke-width="2.5"
+        stroke-linejoin="round"/>
+  <path d="M16 26 L22 33"
+        stroke="#fefae0"
+        stroke-width="2.5"
+        stroke-linecap="round"/>
+
+  <!-- wordmark: Rélwè -->
+  <text x="44" y="34"
+        font-family="Fraunces, Georgia, serif"
+        font-size="28"
+        font-weight="600"
+        fill="#1b4332"
+        letter-spacing="-0.5">Rélwè</text>
+</svg>

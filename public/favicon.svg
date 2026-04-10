@@ -1,0 +1,23 @@
+<svg width="32" height="32" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
+  <!-- background: warm forest green rounded square -->
+  <rect width="32" height="32" rx="7" fill="#1b4332"/>
+
+  <!-- amber accent above the R, representing the é diacritic and a track -->
+  <rect x="9" y="6" width="14" height="2" rx="1" fill="#dda15e"/>
+
+  <!-- stylized R: vertical stem -->
+  <rect x="9" y="11" width="2.5" height="14" fill="#fefae0"/>
+
+  <!-- R bowl (top half) -->
+  <path d="M11.5 11 L18 11 Q22 11 22 14.5 Q22 18 18 18 L11.5 18 Z"
+        fill="none"
+        stroke="#fefae0"
+        stroke-width="2.5"
+        stroke-linejoin="round"/>
+
+  <!-- R diagonal leg -->
+  <path d="M16 18 L22 25"
+        stroke="#fefae0"
+        stroke-width="2.5"
+        stroke-linecap="round"/>
+</svg>
