@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Suspense } from "react";
 
 import { LoginForm } from "./login-form";
 
@@ -15,7 +16,9 @@ export default function LoginPage() {
       <p className="text-muted mb-8">
         Log in to book your next train ride.
       </p>
-      <LoginForm />
+      <Suspense>
+        <LoginForm />
+      </Suspense>
     </div>
   );
 }
