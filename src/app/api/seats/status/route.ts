@@ -10,7 +10,7 @@ export async function GET(request: NextRequest) {
 
   if (!trainId || !cabinClass) {
     return NextResponse.json(
-      { error: "trainId and class are required" },
+      { error: "Missing required parameters: trainId and class." },
       { status: 400 },
     );
   }

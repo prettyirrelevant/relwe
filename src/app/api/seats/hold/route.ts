@@ -2,6 +2,7 @@ import { NextResponse, NextRequest } from "next/server";
 import { and, eq, lt, or } from "drizzle-orm";
 import { headers } from "next/headers";
 
+import { validateBookable } from "~/lib/train-availability";
 import { HOLD_DURATION_MS } from "~/lib/constants";
 import { seats } from "~/db/schema";
 import { auth } from "~/lib/auth";
@@ -12,16 +13,32 @@ export async function POST(request: NextRequest) {
   if (!session) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
-  const { sessionId, seatId } = (await request.json()) as {
-    sessionId: string;
-    seatId: string;
-  };
+  const { fromStationId, travelDate, sessionId, trainId, seatId } =
+    (await request.json()) as {
+      fromStationId: string;
+      travelDate: string;
+      sessionId: string;
+      trainId: string;
+      seatId: string;
+    };
 
-  if (!seatId || !sessionId) {
+  if (!seatId || !sessionId || !trainId || !fromStationId || !travelDate) {
     return NextResponse.json(
-      { error: "seatId and sessionId are required" },
+      {
+        error:
+          "Missing required parameters: seatId, sessionId, trainId, fromStationId, and travelDate.",
+      },
       { status: 400 },
     );
+  }
+
+  const validationError = await validateBookable({
+    fromStationId,
+    travelDate,
+    trainId,
+  });
+  if (validationError) {
+    return NextResponse.json({ error: validationError }, { status: 400 });
   }
 
   const holdUntil = new Date(Date.now() + HOLD_DURATION_MS);

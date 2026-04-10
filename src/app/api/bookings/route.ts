@@ -3,6 +3,7 @@ import { headers } from "next/headers";
 import { inArray } from "drizzle-orm";
 
 import { bookingPassengers, bookings, seats } from "~/db/schema";
+import { validateBookable } from "~/lib/train-availability";
 import { RESERVATION_DURATION_MS } from "~/lib/constants";
 import { getBookingWalletAddress } from "~/lib/solana";
 import { ID_PREFIXES, prefixedId } from "~/lib/id";
@@ -35,6 +36,15 @@ export async function POST(request: NextRequest) {
     trainId: string;
     class: string;
   };
+
+  const validationError = await validateBookable({
+    fromStationId: body.originStationId,
+    travelDate: body.travelDate,
+    trainId: body.trainId,
+  });
+  if (validationError) {
+    return NextResponse.json({ error: validationError }, { status: 400 });
+  }
 
   const datePart = body.travelDate.replace(/-/g, "");
   const shortId = prefixedId("").slice(1, 5).toUpperCase();

@@ -12,7 +12,7 @@ export async function GET(request: NextRequest) {
 
   if (!from || !to || !date) {
     return NextResponse.json(
-      { error: "from, to, and date are required" },
+      { error: "Missing required parameters: from, to, and date." },
       { status: 400 },
     );
   }

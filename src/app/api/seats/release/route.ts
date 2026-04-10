@@ -18,7 +18,7 @@ export async function POST(request: NextRequest) {
 
   if (!seatId || !sessionId) {
     return NextResponse.json(
-      { error: "seatId and sessionId are required" },
+      { error: "Missing required parameters: seatId and sessionId." },
       { status: 400 },
     );
   }

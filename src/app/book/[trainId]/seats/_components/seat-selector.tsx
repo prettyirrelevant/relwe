@@ -33,6 +33,11 @@ export function SeatSelector({
   const router = useRouter();
   const [selectedSeatIds, setSelectedSeatIds] = useState<string[]>([]);
   const [coaches, setCoaches] = useState(initialCoaches);
+
+  const parsedParams = new URLSearchParams(searchParams);
+  const fromStationId = parsedParams.get("from") ?? "";
+  const travelDate = parsedParams.get("date") ?? "";
+
   const sessionId =
     typeof window !== "undefined"
       ? (sessionStorage.getItem("relwe-session") ??
@@ -50,31 +55,44 @@ export function SeatSelector({
 
       try {
         const res = await fetch("/api/seats/hold", {
+          body: JSON.stringify({
+            fromStationId,
+            travelDate,
+            sessionId,
+            trainId,
+            seatId,
+          }),
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ sessionId, seatId }),
           method: "POST",
         });
 
         if (!res.ok) {
           // revert
           setSelectedSeatIds((prev) => prev.filter((id) => id !== seatId));
-          // mark seat as taken locally
-          setCoaches((prev) =>
-            prev.map((coach) => ({
-              ...coach,
-              seats: coach.seats.map((s) =>
-                s.id === seatId ? { ...s, status: "held" } : s,
-              ),
-            })),
-          );
-          toast.error("That seat was just taken. Pick another.");
+          const data = (await res
+            .json()
+            .catch(() => ({ error: "" }))) as { error?: string };
+
+          if (res.status === 409) {
+            setCoaches((prev) =>
+              prev.map((coach) => ({
+                ...coach,
+                seats: coach.seats.map((s) =>
+                  s.id === seatId ? { ...s, status: "held" } : s,
+                ),
+              })),
+            );
+            toast.error("That seat was just taken. Pick another.");
+          } else {
+            toast.error(data.error ?? "Couldn't hold seat. Try again.");
+          }
         }
       } catch {
         setSelectedSeatIds((prev) => prev.filter((id) => id !== seatId));
         toast.error("Couldn't hold seat. Try again.");
       }
     },
-    [sessionId],
+    [sessionId, trainId, fromStationId, travelDate],
   );
 
   const handleSeatDeselect = useCallback(
@@ -96,7 +114,7 @@ export function SeatSelector({
 
   function handleContinue() {
     if (selectedSeatIds.length !== maxSelectable) {
-      toast.error(`please select ${maxSelectable} seat(s)`);
+      toast.error(`Please select ${maxSelectable} seat(s).`);
       return;
     }
 
