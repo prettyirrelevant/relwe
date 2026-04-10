@@ -100,3 +100,48 @@ button {
   border-color: var(--color-border);
   color: var(--color-text);
 }
+
+/* print styles */
+@media print {
+  body {
+    background: white;
+    color: black;
+  }
+
+  header,
+  footer,
+  [data-sonner-toaster],
+  .print\:hidden {
+    display: none !important;
+  }
+
+  main {
+    padding: 0 !important;
+  }
+
+  .bg-surface,
+  .bg-surface-raised {
+    background: white !important;
+  }
+
+  .text-text-inverse {
+    color: black !important;
+  }
+
+  .border,
+  .border-border {
+    border-color: #ccc !important;
+  }
+
+  /* avoid breaking ticket cards across pages */
+  section,
+  .ticket-card {
+    page-break-inside: avoid;
+    break-inside: avoid;
+  }
+
+  a {
+    text-decoration: none;
+    color: inherit;
+  }
+}

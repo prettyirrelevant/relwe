@@ -12,6 +12,7 @@ import {
   seats,
 } from "~/db/schema";
 import { CABIN_CLASS_DISPLAY, type CabinClass } from "~/lib/constants";
+import { PrintButton } from "~/components/booking/print-button";
 import { TicketCard } from "~/components/booking/ticket-card";
 import { Footer } from "~/components/layout/footer";
 import { Header } from "~/components/layout/header";
@@ -156,12 +157,15 @@ export default async function TripDetailPage({
           {booking.paymentStatus === "confirmed" && (
             <section>
               <div className="flex items-center justify-between mb-5">
-                <h2 className="text-xs text-muted uppercase tracking-wider">
-                  Your tickets
-                </h2>
-                <p className="text-xs text-muted">
-                  Show the QR code at the station
-                </p>
+                <div>
+                  <h2 className="text-xs text-muted uppercase tracking-wider">
+                    Your tickets
+                  </h2>
+                  <p className="text-xs text-muted mt-1">
+                    Show the QR code at the station
+                  </p>
+                </div>
+                <PrintButton />
               </div>
               <div className="flex flex-col gap-4">
                 {passengerTickets.map((p) => (

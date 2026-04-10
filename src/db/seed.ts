@@ -174,39 +174,16 @@ const TRAINS_DATA = [
 ];
 
 // Prices in kobo (NGN * 100)
-const PRICING_DATA: Array<{
-  prices: Record<CabinClass, { adult: number; minor: number }>;
-  destination: string;
-  origin: string;
-}> = [
-  {
-    prices: {
-      business: { adult: 650_000, minor: 650_000 },
-      standard: { adult: 360_000, minor: 300_000 },
-      first: { adult: 900_000, minor: 900_000 },
-    },
-    destination: "OA",
-    origin: "MJS",
-  },
-  {
-    prices: {
-      business: { adult: 450_000, minor: 450_000 },
-      standard: { adult: 300_000, minor: 200_000 },
-      first: { adult: 600_000, minor: 600_000 },
-    },
-    destination: "PWS",
-    origin: "MJS",
-  },
-  {
-    prices: {
-      business: { adult: 200_000, minor: 200_000 },
-      standard: { adult: 100_000, minor: 60_000 },
-      first: { adult: 300_000, minor: 300_000 },
-    },
-    destination: "OA",
-    origin: "PWS",
-  },
-];
+// Per-km rates in kobo (NGN * 100), derived from real Lagos-Ibadan pricing.
+// Base: full route is 160 km, e.g. Standard adult ₦3,600 → 2,250 kobo/km.
+const KOBO_PER_KM: Record<
+  CabinClass,
+  { adult: number; minor: number }
+> = {
+  business: { adult: 4_063, minor: 4_063 }, // ≈ ₦6,500 for full route
+  standard: { adult: 2_250, minor: 1_875 }, // ₦3,600 / ₦3,000
+  first: { adult: 5_625, minor: 5_625 }, // 160km × 5625 = ₦9,000
+};
 
 async function seed() {
   console.log("seeding stations...");
@@ -273,33 +250,36 @@ async function seed() {
     }
   }
 
-  console.log("seeding pricing...");
+  console.log("seeding pricing for all station pairs...");
+  // Each station has a position (1-9) and is 20 km from the next.
+  // Distance between two stations = |position_a - position_b| * 20 km.
   const pricingRows = [];
-  for (const segment of PRICING_DATA) {
-    for (const cls of ["first", "business", "standard"] as CabinClass[]) {
-      for (const paxType of ["adult", "minor"] as const) {
-        pricingRows.push({
-          destinationStationId: stationMap[segment.destination],
-          originStationId: stationMap[segment.origin],
-          amountKobo: segment.prices[cls][paxType],
-          id: prefixedId(ID_PREFIXES.pricing),
-          passengerType: paxType,
-          class: cls,
-        });
-        pricingRows.push({
-          destinationStationId: stationMap[segment.origin],
-          originStationId: stationMap[segment.destination],
-          amountKobo: segment.prices[cls][paxType],
-          id: prefixedId(ID_PREFIXES.pricing),
-          passengerType: paxType,
-          class: cls,
-        });
+  for (const a of STATIONS_DATA) {
+    for (const b of STATIONS_DATA) {
+      if (a.code === b.code) continue;
+      const distanceKm = Math.abs(a.position - b.position) * 20;
+      for (const cls of ["first", "business", "standard"] as CabinClass[]) {
+        for (const paxType of ["adult", "minor"] as const) {
+          pricingRows.push({
+            amountKobo: calculatePrice(distanceKm, KOBO_PER_KM[cls][paxType]),
+            destinationStationId: stationMap[b.code],
+            originStationId: stationMap[a.code],
+            id: prefixedId(ID_PREFIXES.pricing),
+            passengerType: paxType,
+            class: cls,
+          });
+        }
       }
     }
   }
   await db.insert(pricing).values(pricingRows);
 
   console.log("seed complete!");
+}
+
+// Round to nearest 100 kobo (₦1) to keep prices clean.
+function calculatePrice(distanceKm: number, perKmKobo: number): number {
+  return Math.round((distanceKm * perKmKobo) / 100) * 100;
 }
 
 seed().catch((err) => {
