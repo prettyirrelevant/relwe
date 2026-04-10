@@ -174,15 +174,17 @@ const TRAINS_DATA = [
 ];
 
 // Prices in kobo (NGN * 100)
-// Per-km rates in kobo (NGN * 100), derived from real Lagos-Ibadan pricing.
-// Base: full route is 160 km, e.g. Standard adult ₦3,600 → 2,250 kobo/km.
+// Per-km rates in kobo (NGN * 100).
+// Devnet faucet caps at 1,000 cNGN, so prices are scaled down ~10x
+// from real NRC fares to keep full-route tickets affordable for testing.
+// Full route (160 km): first ₦800, business ₦560, standard ₦320.
 const KOBO_PER_KM: Record<
   CabinClass,
   { adult: number; minor: number }
 > = {
-  business: { adult: 4_063, minor: 4_063 }, // ≈ ₦6,500 for full route
-  standard: { adult: 2_250, minor: 1_875 }, // ₦3,600 / ₦3,000
-  first: { adult: 5_625, minor: 5_625 }, // 160km × 5625 = ₦9,000
+  business: { adult: 350, minor: 350 }, // ≈ ₦560 for full route
+  standard: { adult: 200, minor: 175 }, // ≈ ₦320 / ₦280 for full route
+  first: { adult: 500, minor: 500 }, // ≈ ₦800 for full route
 };
 
 async function seed() {
