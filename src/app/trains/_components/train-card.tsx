@@ -5,12 +5,14 @@ import { useState } from "react";
 
 import { CABIN_CLASS_DISPLAY, type CabinClass } from "~/lib/constants";
 import { Badge } from "~/components/ui/badge";
+import { formatTime } from "~/lib/format";
 
 interface TrainCardProps {
   destination: { arrivalTime: string; area: string; name: string; };
   origin: { departureTime: string; area: string; name: string; };
   classes: ClassAvailability[];
   searchParams: string;
+  travelDate: string;
   code: string;
   name: string;
   type: string;
@@ -23,11 +25,10 @@ interface ClassAvailability {
   class: string;
 }
 
-import { formatTime } from "~/lib/format";
-
 export function TrainCard({
   searchParams,
   destination,
+  travelDate,
   classes,
   origin,
   code,
@@ -38,7 +39,10 @@ export function TrainCard({
   const [expanded, setExpanded] = useState(false);
   const router = useRouter();
 
+  const departed = isDeparted(travelDate, origin.departureTime);
+
   function handleClassSelect(cls: string) {
+    if (departed) return;
     const params = new URLSearchParams(searchParams);
     params.set("class", cls);
     router.push(`/book/${id}/seats?${params}`);
@@ -52,7 +56,11 @@ export function TrainCard({
   const mins = durationMins % 60;
 
   return (
-    <div className="bg-white/80 border border-border rounded-lg overflow-hidden">
+    <div
+      className={`bg-white/80 border border-border rounded-lg overflow-hidden ${
+        departed ? "opacity-50" : ""
+      }`}
+    >
       <button
         className="w-full p-6 text-left cursor-pointer hover:bg-primary/[0.02]"
         onClick={() => setExpanded(!expanded)}
@@ -60,7 +68,10 @@ export function TrainCard({
       >
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div>
-            <h3 className="font-heading text-[18px] text-text">{name}</h3>
+            <div className="flex items-center gap-2">
+              <h3 className="font-heading text-[18px] text-text">{name}</h3>
+              {departed && <Badge variant="neutral">Departed</Badge>}
+            </div>
             <p className="text-muted text-[14px]">
               {code} · {type === "express" ? "Express" : "All stops"}
             </p>
@@ -96,6 +107,7 @@ export function TrainCard({
           <div className="flex flex-wrap gap-4">
             {classes.map((cls) => {
               const isSoldOut = cls.availableSeats === 0;
+              const disabled = isSoldOut || departed;
               const variant: "success" | "warning" | "error" =
                 cls.availableSeats > 10
                   ? "success"
@@ -106,12 +118,12 @@ export function TrainCard({
               return (
                 <button
                   className={`flex-1 min-w-[150px] p-4 rounded-lg border text-left cursor-pointer disabled:cursor-not-allowed disabled:opacity-50 ${
-                    isSoldOut
+                    disabled
                       ? "border-muted/30 bg-muted/5"
                       : "border-primary/20 hover:border-primary hover:bg-primary/[0.02]"
                   }`}
                   onClick={() => handleClassSelect(cls.class)}
-                  disabled={isSoldOut}
+                  disabled={disabled}
                   key={cls.class}
                   type="button"
                 >
@@ -119,9 +131,11 @@ export function TrainCard({
                     {CABIN_CLASS_DISPLAY[cls.class as CabinClass] ?? cls.class}
                   </span>
                   <Badge variant={variant}>
-                    {isSoldOut
-                      ? "sold out"
-                      : `${cls.availableSeats} seats left`}
+                    {departed
+                      ? "Departed"
+                      : isSoldOut
+                        ? "Sold out"
+                        : `${cls.availableSeats} seats left`}
                   </Badge>
                 </button>
               );
@@ -131,4 +145,11 @@ export function TrainCard({
       )}
     </div>
   );
+}
+
+function isDeparted(travelDate: string, departureTime: string): boolean {
+  const today = new Date().toISOString().split("T")[0];
+  if (travelDate !== today) return false;
+  const nowHHMM = new Date().toTimeString().slice(0, 5);
+  return departureTime.slice(0, 5) <= nowHHMM;
 }

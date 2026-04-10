@@ -68,6 +68,7 @@ export default async function TrainsPage({
                   key={train.id}
                   {...train}
                   searchParams={searchParamsString}
+                  travelDate={date}
                 />
               ))}
             </div>
