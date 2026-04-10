@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 import { StationSelect } from "~/components/booking/station-select";
+import { DatePicker } from "~/components/ui/date-picker";
 import { Stepper } from "~/components/ui/stepper";
 
 interface Station {
@@ -94,23 +95,13 @@ export function Hero({ stations }: HeroProps) {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mt-5">
-            <div className="min-w-0">
-              <label
-                className="block text-sm font-medium text-text-secondary mb-2"
-                htmlFor="travel-date"
-              >
-                Date
-              </label>
-              <input
-                className="block w-full min-w-0 h-13 px-4 bg-surface border border-border rounded-xl text-text text-base focus:border-border-strong focus:ring-1 focus:ring-border-strong focus:outline-none transition-colors"
-                min={new Date().toISOString().split("T")[0]}
-                onChange={(e) => setDate(e.target.value)}
-                id="travel-date"
-                value={date}
-                type="date"
-                required
-              />
-            </div>
+            <DatePicker
+              minDate={new Date()}
+              onChange={setDate}
+              id="travel-date"
+              label="Date"
+              value={date}
+            />
             <Stepper
               onChange={setPassengers}
               label="Passengers"

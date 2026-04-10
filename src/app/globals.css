@@ -57,6 +57,36 @@ button {
   color: var(--color-text);
 }
 
+/* react-day-picker theme overrides */
+.rdp-root {
+  --rdp-accent-color: var(--color-primary);
+  --rdp-background-color: var(--color-surface-raised);
+  --rdp-accent-background-color: var(--color-accent);
+  --rdp-font-family: var(--font-body);
+  --rdp-day-height: 36px;
+  --rdp-day-width: 36px;
+  --rdp-day_button-height: 36px;
+  --rdp-day_button-width: 36px;
+  --rdp-day_button-border-radius: 8px;
+  --rdp-selected-border: 2px solid var(--color-primary);
+  --rdp-disabled-opacity: 0.3;
+  color: var(--color-text);
+}
+
+.rdp-caption_label,
+.rdp-weekday {
+  color: var(--color-text-secondary);
+}
+
+.rdp-day_button:hover:not([disabled]) {
+  background: var(--color-surface);
+}
+
+.rdp-selected .rdp-day_button {
+  background: var(--color-primary);
+  color: var(--color-text-inverse);
+}
+
 @keyframes marquee {
   0% {
     transform: translateX(0);
