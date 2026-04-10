@@ -102,7 +102,7 @@ export function Hero({ stations }: HeroProps) {
                 Date
               </label>
               <input
-                className="block w-full min-w-0 h-13 px-4 bg-surface border border-border rounded-xl text-text text-base appearance-none focus:border-border-strong focus:ring-1 focus:ring-border-strong focus:outline-none transition-colors"
+                className="block w-full min-w-0 h-13 px-4 bg-surface border border-border rounded-xl text-text text-base focus:border-border-strong focus:ring-1 focus:ring-border-strong focus:outline-none transition-colors"
                 min={new Date().toISOString().split("T")[0]}
                 onChange={(e) => setDate(e.target.value)}
                 id="travel-date"
