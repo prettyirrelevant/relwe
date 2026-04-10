@@ -1,15 +1,17 @@
 "use client";
 
-import { useSearchParams, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import Link from "next/link";
 
 import { signIn } from "~/lib/auth-client";
 
-export function LoginForm() {
+interface LoginFormProps {
+  redirect: string;
+}
+
+export function LoginForm({ redirect }: LoginFormProps) {
   const router = useRouter();
-  const searchParams = useSearchParams();
-  const redirect = searchParams.get("redirect") ?? "/";
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -34,6 +36,11 @@ export function LoginForm() {
 
     router.push(redirect);
   }
+
+  const signupHref =
+    redirect === "/"
+      ? "/signup"
+      : `/signup?redirect=${encodeURIComponent(redirect)}`;
 
   return (
     <form className="flex flex-col gap-5" onSubmit={handleSubmit}>
@@ -77,7 +84,7 @@ export function LoginForm() {
 
       <p className="text-center text-sm text-muted">
         Don&apos;t have an account?{" "}
-        <Link className="text-primary underline underline-offset-4" href="/signup">
+        <Link className="text-primary underline underline-offset-4" href={signupHref}>
           Sign up
         </Link>
       </p>

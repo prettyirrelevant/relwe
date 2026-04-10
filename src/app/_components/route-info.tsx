@@ -18,16 +18,16 @@ export function RouteInfo() {
           Lagos to Ibadan. 180 km. 9 stations.
         </p>
 
-        <p className="mt-8 text-base md:text-lg text-text-inverse/50 leading-relaxed">
+        <ul className="mt-8 flex flex-wrap items-center justify-center gap-x-3 gap-y-2 text-sm md:text-base text-text-inverse/70">
           {STATION_NAMES.map((name, idx) => (
-            <span key={name}>
-              <span className="text-text-inverse/80">{name}</span>
+            <li className="flex items-center gap-3" key={name}>
+              <span className="whitespace-nowrap">{name}</span>
               {idx < STATION_NAMES.length - 1 && (
-                <span className="mx-2 text-text-inverse/20">·</span>
+                <span aria-hidden className="text-text-inverse/20">·</span>
               )}
-            </span>
+            </li>
           ))}
-        </p>
+        </ul>
 
         <p className="mt-10 text-base text-text-inverse/60 leading-relaxed max-w-lg mx-auto">
           8 daily trains. Choose your seat. Pay with cNGN on Solana, and

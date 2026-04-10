@@ -6,7 +6,13 @@ export const metadata: Metadata = {
   title: "Sign up — Rélwè",
 };
 
-export default function SignupPage() {
+export default async function SignupPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ redirect?: string }>;
+}) {
+  const { redirect = "/" } = await searchParams;
+
   return (
     <div>
       <h1 className="font-heading text-[32px] text-primary mb-2">
@@ -15,7 +21,7 @@ export default function SignupPage() {
       <p className="text-muted mb-8">
         Sign up to start booking train tickets.
       </p>
-      <SignupForm />
+      <SignupForm redirect={redirect} />
     </div>
   );
 }

@@ -6,7 +6,11 @@ import Link from "next/link";
 
 import { signUp } from "~/lib/auth-client";
 
-export function SignupForm() {
+interface SignupFormProps {
+  redirect: string;
+}
+
+export function SignupForm({ redirect }: SignupFormProps) {
   const router = useRouter();
 
   const [name, setName] = useState("");
@@ -42,8 +46,11 @@ export function SignupForm() {
       return;
     }
 
-    router.push("/");
+    router.push(redirect);
   }
+
+  const loginHref =
+    redirect === "/" ? "/login" : `/login?redirect=${encodeURIComponent(redirect)}`;
 
   return (
     <form className="flex flex-col gap-5" onSubmit={handleSubmit}>
@@ -142,7 +149,7 @@ export function SignupForm() {
 
       <p className="text-center text-sm text-muted">
         Already have an account?{" "}
-        <Link className="text-primary underline underline-offset-4" href="/login">
+        <Link className="text-primary underline underline-offset-4" href={loginHref}>
           Log in
         </Link>
       </p>

@@ -98,12 +98,14 @@ export default function PrivacyPage() {
                 Contact
               </h2>
               <p>
-                Questions about privacy? Reach out at{" "}
+                Questions or concerns? Open an issue on{" "}
                 <a
+                  href="https://github.com/prettyirrelevant/relwe/issues"
                   className="text-primary underline underline-offset-4"
-                  href="mailto:privacy@relwe.ng"
+                  rel="noopener noreferrer"
+                  target="_blank"
                 >
-                  privacy@relwe.ng
+                  GitHub
                 </a>
                 .
               </p>

@@ -1,14 +1,18 @@
 import type { Metadata } from "next";
 
-import { Suspense } from "react";
-
 import { LoginForm } from "./login-form";
 
 export const metadata: Metadata = {
   title: "Log in — Rélwè",
 };
 
-export default function LoginPage() {
+export default async function LoginPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ redirect?: string }>;
+}) {
+  const { redirect = "/" } = await searchParams;
+
   return (
     <div>
       <h1 className="font-heading text-[32px] text-primary mb-2">
@@ -17,9 +21,7 @@ export default function LoginPage() {
       <p className="text-muted mb-8">
         Log in to book your next train ride.
       </p>
-      <Suspense>
-        <LoginForm />
-      </Suspense>
+      <LoginForm redirect={redirect} />
     </div>
   );
 }
