@@ -30,8 +30,8 @@ export function RouteInfo() {
         </p>
 
         <p className="mt-10 text-base text-text-inverse/60 leading-relaxed max-w-lg mx-auto">
-          8 daily trains. Choose your seat. Pay with USDC on Solana. Your QR
-          ticket arrives in seconds.
+          8 daily trains. Choose your seat. Pay with cNGN on Solana, and
+          your QR ticket is ready in seconds.
         </p>
       </div>
     </section>

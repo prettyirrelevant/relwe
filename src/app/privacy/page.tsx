@@ -16,66 +16,80 @@ export default function PrivacyPage() {
           <h1 className="font-heading text-3xl text-primary mb-2">
             Privacy Policy
           </h1>
-          <p className="text-text-secondary mb-10">
+          <p className="text-text-secondary mb-2">
             Last updated: April 2026
+          </p>
+          <p className="text-muted text-sm mb-10">
+            Heads up: Rélwè is a proof of concept, not a real booking service.
+            Treat this page as a placeholder.
           </p>
 
           <div className="flex flex-col gap-10 text-text-secondary leading-relaxed">
             <section>
               <h2 className="font-heading text-xl text-text mb-3">
-                Information we collect
+                What we collect
               </h2>
               <p>
-                When you create an account, we collect your name, email address,
-                phone number, and National Identification Number (NIN). When you
-                book a ticket, we collect travel details including route, date,
-                seat selection, and passenger information.
+                When you sign up, we ask for your name, email, phone, and an
+                11 digit NIN. When you book a ticket, we save your trip details
+                (route, date, seats) along with the names and contact info of
+                everyone travelling.
               </p>
             </section>
 
             <section>
               <h2 className="font-heading text-xl text-text mb-3">
-                How we use your information
+                How we use it
               </h2>
               <p>
-                Your information is used to process bookings, generate tickets,
-                send booking confirmations, and verify your identity at the
-                station. We do not sell or share your personal data with third
-                parties for marketing purposes.
+                Your information is only used to process bookings, generate QR
+                tickets, and confirm your trip. We never sell it, and we never
+                share it with third parties for marketing.
               </p>
             </section>
 
             <section>
               <h2 className="font-heading text-xl text-text mb-3">
-                Payment data
+                Payments
               </h2>
               <p>
-                Payments are processed on the Solana blockchain using cNGN. We
-                generate a unique wallet address for each booking. We do not
-                store your wallet private keys or have access to your personal
-                wallet.
+                Payments happen on Solana with cNGN. Each booking gets its own
+                unique wallet address generated on our servers. We only see
+                what arrives at that address. We never see, touch, or store
+                your personal wallet&apos;s private keys.
               </p>
             </section>
 
             <section>
               <h2 className="font-heading text-xl text-text mb-3">
-                Data retention
+                NIN handling
               </h2>
               <p>
-                Booking records are retained for the duration required by
-                Nigerian railway regulations. You may request deletion of your
-                account and associated data by contacting us.
+                In this PoC, the NIN field is not actually verified. Anything
+                with 11 digits is accepted. In a real deployment it would be
+                validated against the official identity registry.
               </p>
             </section>
 
             <section>
               <h2 className="font-heading text-xl text-text mb-3">
-                Security
+                Keeping things safe
               </h2>
               <p>
-                We use industry-standard security measures to protect your
-                data, including encrypted connections, secure session management,
-                and HMAC-signed tickets to prevent tampering.
+                We use HTTPS for everything, sessions are managed with signed
+                cookies, and every QR ticket is HMAC signed so it cannot be
+                forged or tampered with at the station.
+              </p>
+            </section>
+
+            <section>
+              <h2 className="font-heading text-xl text-text mb-3">
+                Deleting your data
+              </h2>
+              <p>
+                You can request a copy or deletion of your account anytime by
+                emailing the address below. There&apos;s no automated tooling
+                yet, but we&apos;ll handle requests manually.
               </p>
             </section>
 
@@ -84,7 +98,7 @@ export default function PrivacyPage() {
                 Contact
               </h2>
               <p>
-                For privacy-related inquiries, contact us at{" "}
+                Questions about privacy? Reach out at{" "}
                 <a
                   className="text-primary underline underline-offset-4"
                   href="mailto:privacy@relwe.ng"

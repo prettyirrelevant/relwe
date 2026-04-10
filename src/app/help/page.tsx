@@ -12,47 +12,47 @@ export const metadata: Metadata = {
 const FAQ_ITEMS = [
   {
     answer:
-      "Search for your route and date on the home page, select a train and class, pick your seats, fill in passenger details, and pay with USDC on Solana. Your QR ticket is generated instantly.",
+      "Search for your route and date on the home page, pick a train and class, choose your seats, fill in passenger details, then pay with cNGN on Solana. Once the payment lands, your QR ticket is ready to download.",
     question: "How do I book a ticket?",
   },
   {
     answer:
-      "We accept USDC on the Solana blockchain. You can pay from any Solana wallet (Phantom, Solflare, etc.). The payment is verified automatically.",
+      "We accept cNGN on the Solana network. Each booking gets its own unique wallet address, so you can pay from any Solana wallet (Phantom, Solflare, Backpack, etc.). The payment is detected and confirmed automatically.",
     question: "What payment methods are accepted?",
   },
   {
     answer:
-      "After payment is confirmed, your QR ticket appears on screen and is sent to your email. You can also find it under \"My trips\" anytime.",
+      "After payment is confirmed, you're taken straight to your trip page where you can download a QR ticket for each passenger. You can come back to it anytime under \"My trips\".",
     question: "How do I get my ticket?",
   },
   {
     answer:
-      "Yes. When selecting passengers, you can enter details for other people. Each passenger needs a name, NIN, and phone number.",
+      "Yes. When you fill in passenger details, you can enter info for other people travelling with you. Each passenger needs their own name, NIN, and phone number.",
     question: "Can I book for someone else?",
   },
   {
     answer:
-      "You can book up to 6 tickets in a single booking.",
+      "Up to 6 tickets in a single booking.",
     question: "How many tickets can I book at once?",
   },
   {
     answer:
-      "Tickets are valid only for the selected date and train. If you miss your train, you will need to book a new ticket.",
+      "Tickets are valid only for the date and train you selected. If you miss your train, you'll need to book again.",
     question: "What if I miss my train?",
   },
   {
     answer:
-      "NIN is collected for identification purposes at the station. Verification is handled during check-in.",
+      "Heads up: this is a proof of concept. NIN isn't actually validated, any 11 digit number works. In a real deployment it would be checked against the official identity registry.",
     question: "Is my NIN verified?",
   },
   {
     answer:
-      "The Lagos-Ibadan corridor covers 9 stations: Ebute Metta, Agege, Agbado, Kajola, Papalanto, Abeokuta, Olodo, Omi-Adio, and Moniya.",
+      "Nine stations along the Lagos to Ibadan corridor: Ebute Metta, Agege, Agbado, Kajola, Papalanto, Abeokuta, Olodo, Omi-Adio, and Moniya.",
     question: "What stations are served?",
   },
   {
     answer:
-      "The full Lagos to Ibadan journey takes approximately 2 hours and 30 minutes. Express trains skip some stations and may be slightly faster.",
+      "About 2 hours 30 minutes end to end. Express trains skip some intermediate stops and can be a little faster.",
     question: "How long is the journey?",
   },
 ];
