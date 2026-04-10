@@ -18,7 +18,7 @@ export default async function TrainsPage({
 
   if (from && to && date) {
     try {
-      trainResults = await searchTrains(from, to);
+      trainResults = await searchTrains(from, to, date);
     } catch {
       error = "Failed to search trains. Please try again.";
     }

@@ -1,7 +1,13 @@
 import { drizzle } from "drizzle-orm/tidb-serverless";
 import { connect } from "@tidbcloud/serverless";
 
-import { type CabinClass, SEAT_LAYOUTS } from "~/lib/constants";
+import {
+  type CabinClass,
+  RUNS_WEEKDAYS,
+  RUNS_WEEKENDS,
+  SEAT_LAYOUTS,
+  RUNS_DAILY,
+} from "~/lib/constants";
 import { ID_PREFIXES, prefixedId } from "~/lib/id";
 
 import {
@@ -42,6 +48,7 @@ const TRAINS_DATA = [
       { departure: "10:21", arrival: "10:18", distance: 160, station: "OA" },
     ],
     direction: "lagos-ibadan",
+    runsOnDays: RUNS_WEEKDAYS,
     name: "Lagos — Ibadan",
     type: "all-stops",
     code: "LI1",
@@ -60,6 +67,7 @@ const TRAINS_DATA = [
     ],
     direction: "ibadan-lagos",
     name: "Ibadan — Lagos",
+    runsOnDays: RUNS_DAILY,
     type: "all-stops",
     code: "IL2",
   },
@@ -76,6 +84,7 @@ const TRAINS_DATA = [
       { departure: "10:36", arrival: "10:33", distance: 160, station: "OA" },
     ],
     direction: "lagos-ibadan",
+    runsOnDays: RUNS_WEEKENDS,
     name: "Lagos — Ibadan",
     type: "all-stops",
     code: "LI3",
@@ -90,6 +99,7 @@ const TRAINS_DATA = [
     ],
     name: "Ibadan — Lagos Express",
     direction: "ibadan-lagos",
+    runsOnDays: RUNS_WEEKENDS,
     type: "express",
     code: "IL4",
   },
@@ -103,6 +113,7 @@ const TRAINS_DATA = [
     ],
     name: "Lagos — Ibadan Express",
     direction: "lagos-ibadan",
+    runsOnDays: RUNS_WEEKENDS,
     type: "express",
     code: "LI5",
   },
@@ -120,6 +131,7 @@ const TRAINS_DATA = [
     ],
     direction: "lagos-ibadan",
     name: "Lagos — Ibadan",
+    runsOnDays: RUNS_DAILY,
     type: "all-stops",
     code: "LI7",
   },
@@ -136,6 +148,7 @@ const TRAINS_DATA = [
       { departure: "18:36", arrival: "18:33", station: "MJS", distance: 160 },
     ],
     direction: "ibadan-lagos",
+    runsOnDays: RUNS_WEEKDAYS,
     name: "Ibadan — Lagos",
     type: "all-stops",
     code: "IL6",
@@ -153,6 +166,7 @@ const TRAINS_DATA = [
       { departure: "19:06", arrival: "19:03", station: "MJS", distance: 160 },
     ],
     direction: "ibadan-lagos",
+    runsOnDays: RUNS_WEEKENDS,
     name: "Ibadan — Lagos",
     type: "all-stops",
     code: "IL8",
@@ -210,6 +224,7 @@ async function seed() {
   for (const train of TRAINS_DATA) {
     const trainId = prefixedId(ID_PREFIXES.train);
     await db.insert(trains).values({
+      runsOnDays: train.runsOnDays,
       direction: train.direction,
       code: train.code,
       name: train.name,

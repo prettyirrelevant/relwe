@@ -83,6 +83,25 @@ export const TRAIN_TYPE = {
 
 export type TrainType = (typeof TRAIN_TYPE)[keyof typeof TRAIN_TYPE];
 
+// Day-of-week bitmask: bit 0 = Sunday, bit 6 = Saturday
+export const DAY_FLAGS = {
+  wednesday: 1 << 3,
+  thursday: 1 << 4,
+  saturday: 1 << 6,
+  tuesday: 1 << 2,
+  sunday: 1 << 0,
+  monday: 1 << 1,
+  friday: 1 << 5,
+} as const;
+
+export const RUNS_DAILY = 0b1111111; // 127
+export const RUNS_WEEKDAYS = 0b0111110; // 62 (Mon-Fri)
+export const RUNS_WEEKENDS = 0b1000001; // 65 (Sun, Sat)
+
+export function dayBitForDate(date: Date): number {
+  return 1 << date.getDay();
+}
+
 export const HOLD_DURATION_MS = 5 * 60 * 1000; // 5 minutes
 export const RESERVATION_DURATION_MS = 15 * 60 * 1000; // 15 minutes
 export const PAYMENT_POLL_INTERVAL_MS = 4 * 1000; // 4 seconds

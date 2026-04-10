@@ -1,0 +1,1 @@
+ALTER TABLE `trains` ADD `runs_on_days` int DEFAULT 127 NOT NULL;

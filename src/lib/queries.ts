@@ -3,6 +3,8 @@ import { and, sql, eq } from "drizzle-orm";
 import { trainStops, stations, coaches, trains, seats } from "~/db/schema";
 import { db } from "~/db";
 
+import { dayBitForDate } from "./constants";
+
 export interface TrainResult {
   classes: { availableSeats: number; totalSeats: number; class: string; }[];
   destination: { arrivalTime: string; area: string; name: string; };
@@ -16,7 +18,10 @@ export interface TrainResult {
 export async function searchTrains(
   from: string,
   to: string,
+  travelDate: string,
 ): Promise<TrainResult[]> {
+  const dayBit = dayBitForDate(new Date(travelDate));
+
   const matchingTrains = await db
     .select({
       trainDirection: trains.direction,
@@ -27,14 +32,17 @@ export async function searchTrains(
     })
     .from(trains)
     .where(
-      sql`EXISTS (
-        SELECT 1 FROM ${trainStops} ts1
-        JOIN ${trainStops} ts2 ON ts1.train_id = ts2.train_id
-        WHERE ts1.train_id = ${trains.id}
-          AND ts1.station_id = ${from}
-          AND ts2.station_id = ${to}
-          AND ts1.sequence < ts2.sequence
-      )`,
+      and(
+        sql`(${trains.runsOnDays} & ${dayBit}) <> 0`,
+        sql`EXISTS (
+          SELECT 1 FROM ${trainStops} ts1
+          JOIN ${trainStops} ts2 ON ts1.train_id = ts2.train_id
+          WHERE ts1.train_id = ${trains.id}
+            AND ts1.station_id = ${from}
+            AND ts2.station_id = ${to}
+            AND ts1.sequence < ts2.sequence
+        )`,
+      ),
     );
 
   if (matchingTrains.length === 0) return [];

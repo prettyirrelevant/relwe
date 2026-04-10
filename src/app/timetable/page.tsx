@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 
 import { eq } from "drizzle-orm";
 
+import { RUNS_WEEKDAYS, RUNS_WEEKENDS, RUNS_DAILY } from "~/lib/constants";
 import { trainStops, stations, trains } from "~/db/schema";
 import { Footer } from "~/components/layout/footer";
 import { Header } from "~/components/layout/header";
@@ -15,6 +16,7 @@ export const metadata: Metadata = {
 
 interface TrainSchedule {
   stops: { stationArea: string; stationName: string; departure: string; arrival: string; }[];
+  runsOnDays: number;
   direction: string;
   code: string;
   name: string;
@@ -63,14 +65,16 @@ function DirectionSection({ trains: trainList, title }: { trains: TrainSchedule[
       <div className="flex flex-col gap-6">
         {trainList.map((train) => (
           <div className="border border-border rounded-2xl overflow-hidden" key={train.code}>
-            <div className="bg-surface-raised px-6 py-4 flex items-center justify-between">
+            <div className="bg-surface-raised px-6 py-4 flex items-center justify-between gap-4">
               <div>
                 <span className="font-heading text-base text-text">{train.name}</span>
                 <span className="text-sm text-muted ml-3">{train.code}</span>
               </div>
-              <span className="text-xs text-muted uppercase tracking-wider">
-                {train.type === "express" ? "Express" : "All stops"}
-              </span>
+              <div className="flex items-center gap-3 text-xs text-muted uppercase tracking-wider whitespace-nowrap">
+                <span>{train.type === "express" ? "Express" : "All stops"}</span>
+                <span className="text-muted/40">·</span>
+                <span>{runsLabel(train.runsOnDays)}</span>
+              </div>
             </div>
             <div className="overflow-x-auto">
               <table className="w-full text-left text-sm">
@@ -120,6 +124,7 @@ async function getFullTimetable(): Promise<TrainSchedule[]> {
         .orderBy(trainStops.sequence);
 
       return {
+        runsOnDays: train.runsOnDays,
         direction: train.direction,
         code: train.code,
         name: train.name,
@@ -130,4 +135,12 @@ async function getFullTimetable(): Promise<TrainSchedule[]> {
   );
 
   return schedules;
+}
+
+function runsLabel(mask: number): string {
+  if (mask === RUNS_DAILY) return "Daily";
+  if (mask === RUNS_WEEKDAYS) return "Mon — Fri";
+  if (mask === RUNS_WEEKENDS) return "Sat & Sun";
+  const days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+  return days.filter((_, i) => mask & (1 << i)).join(", ");
 }

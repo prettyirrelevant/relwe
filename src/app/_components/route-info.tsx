@@ -23,7 +23,7 @@ export function RouteInfo() {
             <li className="flex items-center gap-3" key={name}>
               <span className="whitespace-nowrap">{name}</span>
               {idx < STATION_NAMES.length - 1 && (
-                <span aria-hidden className="text-text-inverse/20">·</span>
+                <span className="text-text-inverse/20" aria-hidden>·</span>
               )}
             </li>
           ))}
